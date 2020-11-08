@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import prueba.Boton;
 import prueba.Funciones;
 import prueba.Índice;
@@ -33,6 +34,16 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
     ArrayList<Índice> inAutor;
     ArrayList<Índice> inPista;
     ArrayList<Índice> inAño;
+    public static int estado;
+
+    public static int getEstado() {
+        return estado;
+    }
+
+    public static void setEstado(int estado) {
+        Interfaz.estado = estado;
+        
+    }
             
     /**
      * Creates new form Interfaz
@@ -77,6 +88,11 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
         BuscarPista = new javax.swing.JButton();
         BuscarAño = new javax.swing.JButton();
         Texto = new javax.swing.JTextField();
+        EliminarArtista = new javax.swing.JButton();
+        EliminarPista = new javax.swing.JButton();
+        EliminarAño = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        GuardarCambios = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -131,16 +147,19 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(BAbrir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(AgregarRuta, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                     .addComponent(BotonArtista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(BotonAlbum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BtnVaciarPantalla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(BotonPista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(AgregarRuta, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE))
+                    .addComponent(BotonAlbum, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                    .addComponent(BAbrir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BotonPista, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(BtnVaciarPantalla)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -156,7 +175,7 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                     .addComponent(BotonArtista)
                     .addComponent(BotonAlbum)
                     .addComponent(BotonPista))
-                .addGap(30, 30, 30))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(153, 255, 153));
@@ -165,11 +184,11 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
         Panel.setLayout(PanelLayout);
         PanelLayout.setHorizontalGroup(
             PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 666, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         PanelLayout.setVerticalGroup(
             PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 184, Short.MAX_VALUE)
+            .addGap(0, 186, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -213,6 +232,27 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
             }
         });
 
+        EliminarArtista.setText("Eliminar x Artista");
+        EliminarArtista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarArtistaActionPerformed(evt);
+            }
+        });
+
+        EliminarPista.setText("Eliminar x Pista");
+        EliminarPista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarPistaActionPerformed(evt);
+            }
+        });
+
+        EliminarAño.setText("Eliminar x Año");
+        EliminarAño.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarAñoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -222,11 +262,17 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Texto)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(BuscarArtista)
-                        .addGap(18, 18, 18)
-                        .addComponent(BuscarPista, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(EliminarArtista, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BuscarArtista, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(BuscarPista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(EliminarPista, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
                         .addGap(8, 8, 8)
-                        .addComponent(BuscarAño, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(BuscarAño, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                            .addComponent(EliminarAño, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -234,23 +280,54 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(14, Short.MAX_VALUE)
                 .addComponent(Texto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(3, 3, 3)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BuscarArtista)
                     .addComponent(BuscarPista)
                     .addComponent(BuscarAño))
-                .addGap(28, 28, 28))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EliminarArtista)
+                    .addComponent(EliminarPista)
+                    .addComponent(EliminarAño))
+                .addGap(12, 12, 12))
+        );
+
+        jPanel4.setBackground(new java.awt.Color(153, 102, 255));
+
+        GuardarCambios.setText("Guardar Cambios");
+        GuardarCambios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarCambiosActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(GuardarCambios, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addComponent(GuardarCambios)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,7 +336,9 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -330,6 +409,12 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                 BotonPista.setEnabled(true);
                 BtnVaciarPantalla.setEnabled(true);
                 AgregarRuta.setEnabled(false);
+                BuscarArtista.setEnabled(true);
+                BuscarPista.setEnabled(true);
+                BuscarAño.setEnabled(true);
+                EliminarArtista.setEnabled(true);
+                EliminarPista.setEnabled(true);
+                EliminarAño.setEnabled(true);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -341,23 +426,60 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
 
     private void BuscarArtistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarArtistaActionPerformed
         String artista= Texto.getText();
-        if(!"".equals(artista))
+        Buscar(artista, 3);
+    }//GEN-LAST:event_BuscarArtistaActionPerformed
+
+    private void BuscarPistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarPistaActionPerformed
+       String pista= Texto.getText();
+       Buscar(pista, 7);
+    }//GEN-LAST:event_BuscarPistaActionPerformed
+
+    private void BuscarAñoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarAñoActionPerformed
+        String año= Texto.getText();
+        Buscar(año, 11);
+    }//GEN-LAST:event_BuscarAñoActionPerformed
+
+    private void EliminarArtistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarArtistaActionPerformed
+        String artista= Texto.getText();
+        Eliminar(artista, 3);
+        Texto.setText("");
+    }//GEN-LAST:event_EliminarArtistaActionPerformed
+
+    private void EliminarPistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarPistaActionPerformed
+        String pista= Texto.getText();
+        Eliminar(pista, 7);
+        Texto.setText("");
+    }//GEN-LAST:event_EliminarPistaActionPerformed
+
+    private void EliminarAñoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarAñoActionPerformed
+        String año= Texto.getText();
+        Eliminar(año, 11);
+        Texto.setText("");
+    }//GEN-LAST:event_EliminarAñoActionPerformed
+
+    private void GuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarCambiosActionPerformed
+        
+    }//GEN-LAST:event_GuardarCambiosActionPerformed
+
+    public void Buscar(String texto, int tipo) //me sirve para encontrar un registro, ya sea por autor, pista o año
+    {
+        if(!"".equals(texto))
         {
                
                 try {
                 Biblioteca=new RandomAccessFile(rutaBiblioteca,"rw");
-                Biblioteca.seek(3);
+                Biblioteca.seek(tipo);
                 int posicionPuntero= Biblioteca.readInt();
                 Biblioteca.seek(posicionPuntero);
                 short cantidadEnIndice= Biblioteca.readShort();
                 int verdaderoPuntero=0;
-                byte[] nuevoArtista = new byte[artista.length()];
+                byte[] nuevoArtista = new byte[texto.length()];
                 
-                for(int i=0; i<artista.length(); i++)
+                for(int i=0; i<texto.length(); i++)
                 {
-                    nuevoArtista[i] = (byte) artista.charAt(i);
+                    nuevoArtista[i] = (byte) texto.charAt(i);
                 }
-                artista= new String(nuevoArtista); 
+                texto= new String(nuevoArtista); 
                 int contador=0;
                 for(int i=0; i<cantidadEnIndice; i++)
                 {
@@ -369,7 +491,7 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                     String descripString=new String(descripcion); 
                     int puntero= Biblioteca.readInt(); //obtengo el puntero asignado a ese nombre
                     
-                    if(artista.equals(descripString)&&contador==0){
+                    if(texto.equals(descripString)&&contador==0){
                         verdaderoPuntero= puntero;
                         contador=1;
                         
@@ -408,7 +530,19 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                     this.Panel.removeAll();
                     this.Panel.setLayout(new java.awt.GridLayout(1, 1));
                     b.addActionListener(this);
-                    b.setText(b.getArtista());
+                    if(tipo==3)
+                    {
+                         b.setText(b.getArtista());
+                    }
+                    else if(tipo==7)
+                    {
+                         b.setText(b.getPista());
+                    }
+                    else if(tipo==11)
+                    {
+                         b.setText(b.getAño());
+                    }
+                   
                     b.setVisible(true);
                     this.Panel.add(b);
                 }
@@ -420,65 +554,134 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                 Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        
-    }//GEN-LAST:event_BuscarArtistaActionPerformed
-
-    private void BuscarPistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarPistaActionPerformed
-       String pista= Texto.getText();
-       if(!"".equals(pista))
-        {
-                try {
-                Biblioteca=new RandomAccessFile(rutaBiblioteca,"rw");
-                Biblioteca.seek(7);
-                int posicionPuntero= Biblioteca.readInt();
-                Biblioteca.seek(posicionPuntero);
-                short cantidadEnIndice= Biblioteca.readShort();
-                
-                int verdaderoPuntero=0;
-                byte[] nuevoArtista = new byte[pista.length()];
-                
-                for(int i=0; i<pista.length(); i++)
+    }
+    
+    public void Eliminar(String texto, int tipo)
+    {
+        inAutor = new ArrayList();
+        inPista = new ArrayList();
+        inAño = new ArrayList();
+        //############################################################################ aquí estoy teniendo los indices
+        try {
+            Biblioteca=new RandomAccessFile(rutaBiblioteca,"rw");
+            byte[] cabecera = new byte[3];
+            Biblioteca.read(cabecera);
+            String tagCab=new String(cabecera);
+            if("BAC".equals(tagCab))
+            {
+                int posicionPrimerIndice=Biblioteca.readInt();
+                Biblioteca.seek(posicionPrimerIndice);
+//              TextoBooleano.setText("si es"); //esto no sé si vale la pena dejarlo o no
+                //tengo que mandar la info a los punteros
+                short cantPunteros= Biblioteca.readShort();
+                while(cantPunteros!=0)
                 {
-                    nuevoArtista[i] = (byte) pista.charAt(i);
-                }
-                pista= new String(nuevoArtista); 
-                int contador=0;
-                for(int i=0; i<cantidadEnIndice; i++)
-                {
-                    int tamañoDescripcion= Biblioteca.readShort()-1; //leo el short con el tamaño del nombre
-                    
+                    Índice ind= new Índice();
+                    //ind.setTamañoDef(Biblioteca.readShort());
+                    ind.setTamañoDef((int) Biblioteca.readShort()-1); //el tamaño 
                     Biblioteca.readByte();
-                    byte[] descripcion = new byte[tamañoDescripcion];
-                    Biblioteca.read(descripcion); //le asigno el nombre (básicamente ya lo tengo) 
-                    String descripString=new String(descripcion); 
-                    int puntero= Biblioteca.readInt(); //obtengo el puntero asignado a ese nombre
-                    
-                    if(pista.equals(descripString)&&contador==0){
-                        verdaderoPuntero= puntero;
-                        contador=1;
-                       
-                    }
-                    
+                    byte[] definicion = new byte[ind.getTamañoDef()];
+                    Biblioteca.read(definicion);
+                    String nDefi=new String(definicion); 
+                    ind.setDefinicion(nDefi); //la definición
+                    ind.setPuntero(Biblioteca.readInt()); //el puntero
+                    inAutor.add(ind);
+                    cantPunteros--;
                 }
-                if(verdaderoPuntero!=0)
+                cantPunteros= Biblioteca.readShort();
+                while(cantPunteros!=0)
                 {
-                    Biblioteca.seek(verdaderoPuntero);
+                    Índice ind= new Índice();
+                    //ind.setTamañoDef(Biblioteca.readShort());
+                    ind.setTamañoDef((int) Biblioteca.readShort()); //el tamaño 
+                    byte[] definicion = new byte[ind.getTamañoDef()];
+                    Biblioteca.read(definicion);
+                    String nDefi=new String(definicion); 
+                    ind.setDefinicion(nDefi); //la definición
+                    ind.setPuntero(Biblioteca.readInt()); //el puntero
+                    inPista.add(ind);
+                    cantPunteros--;
+                }
+                cantPunteros= Biblioteca.readShort();
+                while(cantPunteros!=0)
+                {
+                    Índice ind= new Índice();
+                    //ind.setTamañoDef(Biblioteca.readShort());
+                    ind.setTamañoDef((int) Biblioteca.readShort()); //el tamaño 
+                    byte[] definicion = new byte[ind.getTamañoDef()];
+                    Biblioteca.read(definicion);
+                    String nDefi=new String(definicion); 
+                    ind.setDefinicion(nDefi); //la definición
+                    ind.setPuntero(Biblioteca.readInt()); //el puntero
+                    inAño.add(ind);
+                    cantPunteros--;
+                }
+            }
+            Biblioteca.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //############################################################################
+        int puntero=-1;
+        if(!"".equals(texto))
+        {
+            int posicionEnLista=-1;
+            if(tipo==3)
+            {
+                for(int i=0; i<inAutor.size();i++)
+                {
+                    if(texto.equals(inAutor.get(i).getDefinicion()))
+                    {
+                        
+                        posicionEnLista=i;
+                        puntero=inAutor.get(i).getPuntero();
+                    }
+                }
+            }
+            else if(tipo==7)
+            {
+                for(int i=0; i<inPista.size();i++)
+                {
+                    if(texto.equals(inPista.get(i).getDefinicion()))
+                    {
+                        posicionEnLista=i;
+                        puntero=inAutor.get(i).getPuntero();
+                    }
+                }
+            }
+            else if(tipo==11)
+            {
+                for(int i=0; i<inAño.size();i++)
+                {
+                    if(texto.equals(inAño.get(i).getDefinicion()))
+                    {
+                        posicionEnLista=i;
+                        puntero=inAutor.get(i).getPuntero();
+                    }
+                }
+            }
+            //////// aquí ya tengo si ese valor que se quería eliminar si existe
+            if(puntero!=-1)
+            {
+                try {
+                    Biblioteca=new RandomAccessFile(rutaBiblioteca,"rw");
+                    Biblioteca.seek(puntero);
                     byte[] lectorT = new byte[4];
                     Biblioteca.read(lectorT);
                     String identificador= new String(lectorT);
-                    
+                    ArrayList<Boton> auxEliminar= new ArrayList();
                     Boton b = new Boton();
-                    if("BEBP".equals(identificador))
+                    int contador=0;
+                    while(!"MERC".equals(identificador))
                     {
-                        lectorT = new byte[4];
-                        Biblioteca.read(lectorT);
-                        identificador= new String(lectorT);
-                        
-                    }
-                    while((!"BEBP".equals(identificador))&&(!"MERC".equals(identificador)))
-                    {   
-                        
+                        if("BEBP".equals(identificador))
+                        {
+                            lectorT = new byte[4];
+                            Biblioteca.read(lectorT);
+                            identificador= new String(lectorT);
+                        }
                         short tamaño= Biblioteca.readShort();
                         byte[] info = new byte[tamaño];
                         Biblioteca.read(info);
@@ -486,112 +689,209 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                         //
                         lectorT = new byte[4];
                         Biblioteca.read(lectorT);
-                        identificador= new String(lectorT); 
-                        
-                        
-                    }
-                    this.Panel.removeAll();
-                    this.Panel.setLayout(new java.awt.GridLayout(1, 1));
-                    b.addActionListener(this);
-                    b.setText(b.getPista());
-                    b.setVisible(true);
-                    this.Panel.add(b);
-                }
-                Biblioteca.close();
-                Texto.setText("");
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-    }//GEN-LAST:event_BuscarPistaActionPerformed
-
-    private void BuscarAñoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarAñoActionPerformed
-        String año= Texto.getText();
-        if(!"".equals(año))
-        {
-                try {
-                Biblioteca=new RandomAccessFile(rutaBiblioteca,"rw");
-                Biblioteca.seek(11);
-                int posicionPuntero= Biblioteca.readInt();
-                Biblioteca.seek(posicionPuntero);
-                System.out.println("posicion puntero: "+posicionPuntero);
-                short cantidadEnIndice= Biblioteca.readShort();
-                int verdaderoPuntero=0;
-                byte[] nuevoArtista = new byte[año.length()];
-                
-                for(int i=0; i<año.length(); i++)
-                {
-                    nuevoArtista[i] = (byte) año.charAt(i);
-                }
-                año= new String(nuevoArtista); 
-                int contador=0;
-                for(int i=0; i<cantidadEnIndice; i++)
-                {
-                    int tamañoDescripcion= Biblioteca.readShort()-1; //leo el short con el tamaño del nombre
-                    
-                    Biblioteca.readByte();
-                    byte[] descripcion = new byte[tamañoDescripcion];
-                    Biblioteca.read(descripcion); //le asigno el nombre (básicamente ya lo tengo) 
-                    String descripString=new String(descripcion); 
-                    int puntero= Biblioteca.readInt(); //obtengo el puntero asignado a ese nombre
-                    
-                    if(año.equals(descripString)&&contador==0){
-                        verdaderoPuntero= puntero;
-                        contador=1;
-                        
-                    }
-                    
-                }
-                if(verdaderoPuntero!=0)
-                {
-                    Biblioteca.seek(verdaderoPuntero);
-                    byte[] lectorT = new byte[4];
-                    Biblioteca.read(lectorT);
-                    String identificador= new String(lectorT);
-                    
-                    Boton b = new Boton();
-                    if("BEBP".equals(identificador))
-                    {
-                        lectorT = new byte[4];
-                        Biblioteca.read(lectorT);
                         identificador= new String(lectorT);
-                        
+                        if(("BEBP".equals(identificador))||("MERC".equals(identificador)))
+                        {
+                            if(contador!=0)
+                            {
+                                auxEliminar.add(b);
+                            }
+                            b= new Boton();
+                            contador++;
+                        }
                     }
-                    while((!"BEBP".equals(identificador))&&(!"MERC".equals(identificador)))
-                    {   
-                        
-                        short tamaño= Biblioteca.readShort();
-                        byte[] info = new byte[tamaño];
-                        Biblioteca.read(info);
-                        b.DiferenciadorTags(identificador, info);
-                        //
-                        lectorT = new byte[4];
-                        Biblioteca.read(lectorT);
-                        identificador= new String(lectorT); 
-                        
-                        
+                    //una vez afuera de este while debería tener todas las demás canciones excepto la que quiero eliminar en mi lista AuxEliminar, ahora solo es de reescribir
+                    //esto de aquí es para sobre escribir la info
+                    Biblioteca.seek(puntero);
+                    for(int i=0; i<auxEliminar.size(); i++)
+                    {
+                        Boton aux= auxEliminar.get(i);
+                        Biblioteca.writeBytes("BEBP");
+                        Biblioteca.writeBytes("PATH");
+                        String ruta= aux.getPath();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                        if(!"".equals(aux.getArtista()))
+                        {
+                            Biblioteca.writeBytes("TPE1");
+                            ruta= aux.getArtista();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getAlbum()))
+                        {
+                            Biblioteca.writeBytes("TALB");
+                            ruta= aux.getAlbum();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getAño()))
+                        {
+                            Biblioteca.writeBytes("TDRC");
+                            ruta= aux.getAño();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getDisquera()))
+                        {
+                            Biblioteca.writeBytes("TPUB");
+                            ruta= aux.getDisquera();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getDuracion()))
+                        {
+                            Biblioteca.writeBytes("TLEN");
+                            ruta= aux.getDuracion();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getEnlaces()))
+                        {
+                            Biblioteca.writeBytes("LINK");
+                            ruta= aux.getEnlaces();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getGenero()))
+                        {
+                            Biblioteca.writeBytes("TCON");
+                            ruta= aux.getGenero();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getLetraPista()))
+                        {
+                            Biblioteca.writeBytes("TEXT");
+                            ruta= aux.getLetraPista();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getNoAlb()))
+                        {
+                            Biblioteca.writeBytes("TPOS");
+                            ruta= aux.getNoAlb();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getOtrasPaginas()))
+                        {
+                            Biblioteca.writeBytes("WPUB");
+                            ruta= aux.getOtrasPaginas();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getPaginaDeLaDisquera()))
+                        {
+                            Biblioteca.writeBytes("WOAS");
+                            ruta= aux.getPaginaDeLaDisquera();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getPaginaDelArtista()))
+                        {
+                            Biblioteca.writeBytes("WOAR");
+                            ruta= aux.getPaginaDelArtista();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
+                        if(!"".equals(aux.getPista()))
+                        {
+                            Biblioteca.writeBytes("TIT2");
+                            ruta= aux.getPista();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                            
+                        }
+                        if(!"".equals(aux.getTextoInformativo()))
+                        {
+                            Biblioteca.writeBytes("TXXX");
+                            ruta= aux.getTextoInformativo();
+                            Biblioteca.writeShort(ruta.length());
+                            Biblioteca.writeBytes(ruta);
+                        }
                     }
-                    this.Panel.removeAll();
-                    this.Panel.setLayout(new java.awt.GridLayout(1, 1));
-                    b.addActionListener(this);
-                    b.setText(b.getAño());
-                    b.setVisible(true);
-                    this.Panel.add(b);
+                    Biblioteca.writeBytes("MERC");
+                    if(tipo==3)
+                    {
+                        inAutor.remove(posicionEnLista);
+                    }
+                    else if(tipo==7)
+                    {
+                         inPista.remove(posicionEnLista);
+                    }
+                    else if(tipo==11)
+                    {
+                         inAño.remove(posicionEnLista);
+                    }
+                    //ahora a escribir los indices en sus nuevas posiciones
+                    int posicionActual= (int) Biblioteca.getFilePointer();
+                    Biblioteca.writeShort(inAutor.size());
+                    Biblioteca.seek(3);
+                    Biblioteca.writeInt(posicionActual);
+                    Biblioteca.seek(posicionActual+2);
+                    for(int i=0;i<inAutor.size();i++)
+                    {
+                        Índice auxI = new Índice();
+                        auxI= inAutor.get(i);
+
+                        if(!"".equals(auxI.getDefinicion()))
+                        {
+                            Biblioteca.writeShort(auxI.getTamañoDef());
+                            Biblioteca.writeBytes(auxI.getDefinicion());
+                            Biblioteca.writeInt(auxI.getPuntero());
+                        }
+                    }
+                    posicionActual= (int) Biblioteca.getFilePointer();
+                    Biblioteca.writeShort(inPista.size());
+                    Biblioteca.seek(7);
+                    Biblioteca.writeInt(posicionActual);
+                    Biblioteca.seek(posicionActual+2);
+                    for(int i=0;i<inPista.size();i++)
+                    {
+                        Índice auxI = new Índice();
+                        auxI= inPista.get(i);
+
+                        if(!"".equals(auxI.getDefinicion()))
+                        {
+                            Biblioteca.writeShort(auxI.getTamañoDef());
+                            Biblioteca.writeBytes(auxI.getDefinicion());
+                            Biblioteca.writeInt(auxI.getPuntero());
+                        }
+
+                    }
+                    posicionActual= (int) Biblioteca.getFilePointer();
+                    Biblioteca.writeShort(inAño.size());
+                    Biblioteca.seek(11);
+                    Biblioteca.writeInt(posicionActual);
+                    Biblioteca.seek(posicionActual+2);
+                    for(int i=0;i<inAño.size();i++)
+                    {
+                        Índice auxI = new Índice();
+                        auxI= inAño.get(i);
+
+                        if(!"".equals(auxI.getDefinicion()))
+                        {
+                            Biblioteca.writeShort(auxI.getTamañoDef());
+                            Biblioteca.writeBytes(auxI.getDefinicion());
+                            Biblioteca.writeInt(auxI.getPuntero());
+                        }
+                    }
+                    Biblioteca.close();
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                Biblioteca.close();
-                Texto.setText("");
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-    }//GEN-LAST:event_BuscarAñoActionPerformed
 
+    }
+    
+    
+        
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -648,6 +948,7 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                 {
                     if("BEBP".equals(identificador))
                     {
+                        b.setPuntero((int) Biblioteca.getFilePointer() -4);
                         lectorT = new byte[4];
                         Biblioteca.read(lectorT);
                         identificador= new String(lectorT);
@@ -911,7 +1212,6 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                     }
                 }
                 posicionActual= (int) Biblioteca.getFilePointer();
-                
                 Biblioteca.writeShort(inPista.size());
                 Biblioteca.seek(7);
                 Biblioteca.writeInt(posicionActual);
@@ -967,6 +1267,13 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
                 BotonAlbum.setEnabled(false);
                 BotonPista.setEnabled(false);
                 BtnVaciarPantalla.setEnabled(false);
+                
+                BuscarArtista.setEnabled(false);
+                BuscarPista.setEnabled(false);
+                BuscarAño.setEnabled(false);
+                EliminarArtista.setEnabled(false);
+                EliminarPista.setEnabled(false);
+                EliminarAño.setEnabled(false);
             }
             else{
                 AgregarRuta.setEnabled(false);
@@ -994,10 +1301,15 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JButton BuscarArtista;
     private javax.swing.JButton BuscarAño;
     private javax.swing.JButton BuscarPista;
+    private javax.swing.JButton EliminarArtista;
+    private javax.swing.JButton EliminarAño;
+    private javax.swing.JButton EliminarPista;
+    private javax.swing.JButton GuardarCambios;
     private javax.swing.JPanel Panel;
     private javax.swing.JTextField Texto;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
 }

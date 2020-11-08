@@ -13,21 +13,22 @@ import javax.swing.JButton;
  * @author HP15DA0023LA
  */
 public class Boton extends JButton{
-    private String disquera;
-    private String artista;
-    private String album;
-    private String noAlb;
-    private String año;
-    private String genero;
-    private String pista;
-    private String path;
-    private String duracion;
-    private String letraPista;
-    private String enlaces;
-    private String paginaDelArtista;
-    private String paginaDeLaDisquera;
-    private String otrasPaginas;
-    private String TextoInformativo; 
+    private int puntero;
+    private String disquera="";//TPUB
+    private String artista="";// TPE1
+    private String album="";// TALB
+    private String noAlb="";// TPOS
+    private String año="";// TDRC
+    private String genero="";// TCON
+    private String pista="";// TIT2
+    private String path="";// PATH
+    private String duracion="";// TLEN
+    private String letraPista="";// TEXT
+    private String enlaces="";// LINK
+    private String paginaDelArtista="";// WOAR
+    private String paginaDeLaDisquera="";// WOAS
+    private String otrasPaginas="";// WPUB
+    private String TextoInformativo="";// TXXX
 
     public Boton() 
     {
@@ -103,7 +104,11 @@ public class Boton extends JButton{
         
     }
     
+
     //setters
+    public void setPuntero(int puntero) {
+        this.puntero = puntero;
+    }
 
     public void setDisquera(byte[] contenido) {
         this.disquera=new String(contenido);
@@ -166,6 +171,10 @@ public class Boton extends JButton{
     }
 
     //getters
+    
+    public int getPuntero() {
+        return puntero;
+    }
     public String getDisquera() {
         return disquera;
     }
@@ -225,4 +234,67 @@ public class Boton extends JButton{
     public String getTextoInformativo() {
         return TextoInformativo;
     }
+    
+    //////// otros seters
+
+    public void setDisquera2(String disquera) {
+        this.disquera = disquera;
+    }
+
+    public void setArtista2(String artista) {
+        this.artista = artista;
+    }
+
+    public void setAlbum2(String album) {
+        this.album = album;
+    }
+
+    public void setNoAlb2(String noAlb) {
+        this.noAlb = noAlb;
+    }
+
+    public void setAño2(String año) {
+        this.año = año;
+    }
+
+    public void setGenero2(String genero) {
+        this.genero = genero;
+    }
+
+    public void setPista2(String pista) {
+        this.pista = pista;
+    }
+
+    public void setPath2(String path) {
+        this.path = path;
+    }
+
+    public void setDuracion2(String duracion) {
+        this.duracion = duracion;
+    }
+
+    public void setLetraPista2(String letraPista) {
+        this.letraPista = letraPista;
+    }
+
+    public void setEnlaces2(String enlaces) {
+        this.enlaces = enlaces;
+    }
+
+    public void setPaginaDelArtista2(String paginaDelArtista) {
+        this.paginaDelArtista = paginaDelArtista;
+    }
+
+    public void setPaginaDeLaDisquera2(String paginaDeLaDisquera) {
+        this.paginaDeLaDisquera = paginaDeLaDisquera;
+    }
+
+    public void setOtrasPaginas2(String otrasPaginas) {
+        this.otrasPaginas = otrasPaginas;
+    }
+
+    public void setTextoInformativo2(String TextoInformativo) {
+        this.TextoInformativo = TextoInformativo;
+    }
+    
 }

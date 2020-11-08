@@ -12,12 +12,13 @@ import prueba.Boton;
  * @author HP15DA0023LA
  */
 public class VentanaInfo extends javax.swing.JFrame{
-
+    public static Boton bot = new Boton();
     /**
      * Creates new form VentanaInfo
      */
     public VentanaInfo() {
         initComponents();
+        RegreGuarda.setEnabled(false);
     }
 
     /**
@@ -64,6 +65,8 @@ public class VentanaInfo extends javax.swing.JFrame{
         TOtrasPaginas = new javax.swing.JTextField();
         TTextoInfo = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        Modificar = new javax.swing.JButton();
+        RegreGuarda = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,7 +82,7 @@ public class VentanaInfo extends javax.swing.JFrame{
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(149, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(126, 126, 126))
         );
@@ -235,6 +238,20 @@ public class VentanaInfo extends javax.swing.JFrame{
             }
         });
 
+        Modificar.setText("Modificar");
+        Modificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ModificarActionPerformed(evt);
+            }
+        });
+
+        RegreGuarda.setText("Regresar para Guardar");
+        RegreGuarda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegreGuardaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -242,14 +259,17 @@ public class VentanaInfo extends javax.swing.JFrame{
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(147, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(151, 151, 151))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(Modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(RegreGuarda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,9 +278,12 @@ public class VentanaInfo extends javax.swing.JFrame{
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .addComponent(Modificar, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .addComponent(RegreGuarda, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
+                .addGap(18, 18, 18))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -286,6 +309,33 @@ public class VentanaInfo extends javax.swing.JFrame{
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         VentanaInfo.super.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarActionPerformed
+        darAcceso();
+        RegreGuarda.setEnabled(true);
+        Modificar.setEnabled(false);
+    }//GEN-LAST:event_ModificarActionPerformed
+
+    private void RegreGuardaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegreGuardaActionPerformed
+        Interfaz inter= new Interfaz();
+        inter.estado=1;
+        bot.setDisquera2(TDisquera.getText());
+        bot.setArtista2(TArtista.getText());
+        bot.setAlbum2(TAlbum.getText());
+        bot.setNoAlb2(TNoAlbum.getText());
+        bot.setAño2(TAño.getText());
+        bot.setGenero2(TGenero.getText()); 
+        bot.setPista2(TPista.getText());
+        bot.setPath2(TDirección.getText());
+        bot.setDuracion2(TDuración.getText());
+        bot.setLetraPista2(TLetra.getText());
+        bot.setEnlaces2(TEnlaces.getText());
+        bot.setPaginaDelArtista2(TPaginaArtista.getText());
+        bot.setPaginaDeLaDisquera2(TPaginaDisquera.getText());
+        bot.setOtrasPaginas2(TOtrasPaginas.getText());
+        bot.setTextoInformativo2(TTextoInfo.getText());
+        VentanaInfo.super.setVisible(false);
+    }//GEN-LAST:event_RegreGuardaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -323,6 +373,8 @@ public class VentanaInfo extends javax.swing.JFrame{
     }
     public void agregar(Boton x)
     {
+        bot = x;
+        //
         TDisquera.setText(x.getDisquera());
         TArtista.setText(x.getArtista());
         TAlbum.setText(x.getAlbum());
@@ -338,9 +390,59 @@ public class VentanaInfo extends javax.swing.JFrame{
         TPaginaDisquera.setText(x.getPaginaDeLaDisquera());
         TOtrasPaginas.setText(x.getOtrasPaginas());
         TTextoInfo.setText(x.getTextoInformativo());
+        sinModificar();
+    }
+    public void sinModificar()
+    {
+        TDisquera.setEnabled(false);
+        TArtista.setEnabled(false);
+        TAlbum.setEnabled(false);
+        TNoAlbum.setEnabled(false);
+        TAño.setEnabled(false);
+        TGenero.setEnabled(false);
+        TPista.setEnabled(false);
+        TDirección.setEnabled(false);
+        TDuración.setEnabled(false);
+        TLetra.setEnabled(false);
+        TEnlaces.setEnabled(false);
+        TPaginaArtista.setEnabled(false);
+        TPaginaDisquera.setEnabled(false);
+        TOtrasPaginas.setEnabled(false);
+        TTextoInfo.setEnabled(false);
+    }
+    public void darAcceso()
+    {
+        TDisquera.setEnabled(true);
+        TArtista.setEnabled(true);
+        TAlbum.setEnabled(true);
+        TNoAlbum.setEnabled(true);
+        TAño.setEnabled(true);
+        TGenero.setEnabled(true);
+        TPista.setEnabled(true);
+        TDirección.setEnabled(true);
+        TDuración.setEnabled(true);
+        TLetra.setEnabled(true);
+        TEnlaces.setEnabled(true);
+        TPaginaArtista.setEnabled(true);
+        TPaginaDisquera.setEnabled(true);
+        TOtrasPaginas.setEnabled(true);
+        TTextoInfo.setEnabled(true);
+        
     }
 
+    public static Boton getBot() {
+        return bot;
+    }
+
+    public static void setBot(Boton bot) {
+        VentanaInfo.bot = bot;
+    }
+    
+    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Modificar;
+    private javax.swing.JButton RegreGuarda;
     private javax.swing.JTextField TAlbum;
     private javax.swing.JTextField TArtista;
     private javax.swing.JTextField TAño;
