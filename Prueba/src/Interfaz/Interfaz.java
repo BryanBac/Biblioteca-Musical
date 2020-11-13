@@ -458,7 +458,459 @@ public class Interfaz extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_EliminarAñoActionPerformed
 
     private void GuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarCambiosActionPerformed
-        
+         if(estado==0)
+        {
+            JOptionPane.showMessageDialog(null, "No hay cambios que mostrar");
+        }
+        else
+        {
+            inAutor = new ArrayList();
+            inPista = new ArrayList();
+            inAño = new ArrayList();
+            estado=0;
+            VentanaInfo vinfo= new VentanaInfo();
+            Boton waffle= vinfo.bot;
+            try {
+                Biblioteca=new RandomAccessFile(rutaBiblioteca,"rw");
+                byte[] cabecera = new byte[3];
+                Biblioteca.read(cabecera);
+                String tagCab=new String(cabecera);
+                if("BAC".equals(tagCab))
+                {
+                    int posicionPrimerIndice=Biblioteca.readInt();
+                    Biblioteca.seek(posicionPrimerIndice);
+    //              TextoBooleano.setText("si es"); //esto no sé si vale la pena dejarlo o no
+                    //tengo que mandar la info a los punteros
+                    short cantPunteros= Biblioteca.readShort();
+                    while(cantPunteros!=0)
+                    {
+                        Índice ind= new Índice();
+                        //ind.setTamañoDef(Biblioteca.readShort());
+                        ind.setTamañoDef((int) Biblioteca.readShort()-1); //el tamaño 
+                        Biblioteca.readByte();
+                        byte[] definicion = new byte[ind.getTamañoDef()];
+                        Biblioteca.read(definicion);
+                        String nDefi=new String(definicion); 
+                        ind.setDefinicion(nDefi); //la definición
+                        ind.setPuntero(Biblioteca.readInt()); //el puntero
+                        inAutor.add(ind);
+                        cantPunteros--;
+                    }
+                    cantPunteros= Biblioteca.readShort();
+                    while(cantPunteros!=0)
+                    {
+                        Índice ind= new Índice();
+                        //ind.setTamañoDef(Biblioteca.readShort());
+                        ind.setTamañoDef((int) Biblioteca.readShort()); //el tamaño 
+                        byte[] definicion = new byte[ind.getTamañoDef()];
+                        Biblioteca.read(definicion);
+                        String nDefi=new String(definicion); 
+                        ind.setDefinicion(nDefi); //la definición
+                        ind.setPuntero(Biblioteca.readInt()); //el puntero
+                        inPista.add(ind);
+                        cantPunteros--;
+                    }
+                    cantPunteros= Biblioteca.readShort();
+                    while(cantPunteros!=0)
+                    {
+                        Índice ind= new Índice();
+                        //ind.setTamañoDef(Biblioteca.readShort());
+                        ind.setTamañoDef((int) Biblioteca.readShort()); //el tamaño 
+                        byte[] definicion = new byte[ind.getTamañoDef()];
+                        Biblioteca.read(definicion);
+                        String nDefi=new String(definicion); 
+                        ind.setDefinicion(nDefi); //la definición
+                        ind.setPuntero(Biblioteca.readInt()); //el puntero
+                        inAño.add(ind);
+                        cantPunteros--;
+                    }
+                }
+                Biblioteca.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //////ya obtuve los indices
+            int posicP1=0,posicP2=0,posicP3=0; //para saber en que posicion ya van a haber cambios
+            for(int i=0; i<inAutor.size();i++)
+            {
+                Índice id= inAutor.get(i);
+                if(waffle.getPuntero()>=id.getPuntero())
+                {
+                    posicP1=i;
+                    if(waffle.getPuntero()==id.getPuntero())
+                    {
+                        inAutor.get(i).setTamañoDef(waffle.getArtista().length());
+                        inAutor.get(i).setDefinicion(waffle.getArtista());
+                        
+                    }
+                }
+            }
+            for(int i=0; i<inPista.size();i++)
+            {
+                Índice id= inPista.get(i);
+                if(waffle.getPuntero()>=id.getPuntero())
+                {
+                    posicP2=i;
+                    if(waffle.getPuntero()==id.getPuntero())
+                    {
+                        inPista.get(i).setTamañoDef(waffle.getPista().length());
+                        inPista.get(i).setDefinicion(waffle.getPista());
+                    }
+                }
+            }
+            for(int i=0; i<inAño.size();i++)
+            {
+                Índice id= inAño.get(i);
+                if(waffle.getPuntero()>=id.getPuntero())
+                {
+                    posicP3=i;
+                    if(waffle.getPuntero()==id.getPuntero())
+                    {
+                        inAño.get(i).setTamañoDef(waffle.getAño().length());
+                        inAño.get(i).setDefinicion(waffle.getAño());
+                    }
+                }
+            }
+            int tam1=0, tam2=0;
+            try {
+                //ya tengo las posiciones donde los indices va a tener que variar, y si de casualidad cambie algo como el nombre del artista, año o pista, de una lo actulice en estas listas
+                //ahora solo me falta sobre escribir la info y los tam1 y tam2
+                Biblioteca = new RandomAccessFile(rutaBiblioteca,"rw");
+                Biblioteca.seek(waffle.getPuntero());
+                byte[] lectorT = new byte[4];
+                Biblioteca.read(lectorT);
+                String identificador= new String(lectorT);
+                ArrayList<Boton> auxModificar= new ArrayList();
+                Boton b = new Boton();
+                int contador=0;
+                while(!"MERC".equals(identificador))
+                {
+                    if("BEBP".equals(identificador))
+                    {
+                        lectorT = new byte[4];
+                        Biblioteca.read(lectorT);
+                        identificador= new String(lectorT);
+                    }
+                    short tamaño= Biblioteca.readShort();
+                    byte[] info = new byte[tamaño];
+                    Biblioteca.read(info);
+                    b.DiferenciadorTags(identificador, info);
+                    //
+                    lectorT = new byte[4];
+                    Biblioteca.read(lectorT);
+                    identificador= new String(lectorT);
+                    if(("BEBP".equals(identificador))||("MERC".equals(identificador)))
+                    {
+                        if(contador!=0)
+                        {
+                            auxModificar.add(b);
+                        }
+                        else
+                        {
+                            tam1=(int) Biblioteca.getFilePointer()-4;
+                            
+                        }
+                        b= new Boton();
+                        contador++;
+                    }
+                }
+                //###################
+                Biblioteca.seek(waffle.getPuntero());
+                //necesito meter la información de waffle y obtener tamaño 2
+                Biblioteca.writeBytes("BEBP");
+                Biblioteca.writeBytes("PATH");
+                String ruta= waffle.getPath();
+                Biblioteca.writeShort(ruta.length());
+                Biblioteca.writeBytes(ruta);
+                if(!"".equals(waffle.getArtista()))
+                {
+                    Biblioteca.writeBytes("TPE1");
+                    ruta= waffle.getArtista();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                
+                if(!"".equals(waffle.getAlbum()))
+                {
+                    Biblioteca.writeBytes("TALB");
+                    ruta= waffle.getAlbum();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getAño()))
+                {
+                    Biblioteca.writeBytes("TDRC");
+                    ruta= waffle.getAño();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getDisquera()))
+                {
+                    Biblioteca.writeBytes("TPUB");
+                    ruta= waffle.getDisquera();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getDuracion()))
+                {
+                    Biblioteca.writeBytes("TLEN");
+                    ruta= waffle.getDuracion();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getEnlaces()))
+                {
+                    Biblioteca.writeBytes("LINK");
+                    ruta= waffle.getEnlaces();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getGenero()))
+                {
+                    Biblioteca.writeBytes("TCON");
+                    ruta= waffle.getGenero();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getLetraPista()))
+                {
+                    Biblioteca.writeBytes("TEXT");
+                    ruta= waffle.getLetraPista();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getNoAlb()))
+                {
+                    Biblioteca.writeBytes("TPOS");
+                    ruta= waffle.getNoAlb();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getOtrasPaginas()))
+                {
+                    Biblioteca.writeBytes("WPUB");
+                    ruta= waffle.getOtrasPaginas();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getPaginaDeLaDisquera()))
+                {
+                    Biblioteca.writeBytes("WOAS");
+                    ruta= waffle.getPaginaDeLaDisquera();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getPaginaDelArtista()))
+                {
+                    Biblioteca.writeBytes("WOAR");
+                    ruta= waffle.getPaginaDelArtista();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                if(!"".equals(waffle.getPista()))
+                {
+                    Biblioteca.writeBytes("TIT2");
+                    ruta= waffle.getPista();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+            
+                }
+                if(!"".equals(waffle.getTextoInformativo()))
+                {
+                    Biblioteca.writeBytes("TXXX");
+                    ruta= waffle.getTextoInformativo();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                }
+                tam2= (int) Biblioteca.getFilePointer();
+                //realizo la resta de tam
+                int resta= tam2-tam1;
+                //para sobreescribir con los valores que guardé en auxmodificar
+                for(int i=0; i<auxModificar.size(); i++)
+                {
+                    Boton aux= auxModificar.get(i);
+                    Biblioteca.writeBytes("BEBP");
+                    Biblioteca.writeBytes("PATH");
+                    ruta= aux.getPath();
+                    Biblioteca.writeShort(ruta.length());
+                    Biblioteca.writeBytes(ruta);
+                    if(!"".equals(aux.getArtista()))
+                    {
+                        Biblioteca.writeBytes("TPE1");
+                        ruta= aux.getArtista();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getAlbum()))
+                    {
+                        Biblioteca.writeBytes("TALB");
+                        ruta= aux.getAlbum();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getAño()))
+                    {
+                        Biblioteca.writeBytes("TDRC");
+                        ruta= aux.getAño();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getDisquera()))
+                    {
+                        Biblioteca.writeBytes("TPUB");
+                        ruta= aux.getDisquera();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getDuracion()))
+                    {
+                        Biblioteca.writeBytes("TLEN");
+                        ruta= aux.getDuracion();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getEnlaces()))
+                    {
+                        Biblioteca.writeBytes("LINK");
+                        ruta= aux.getEnlaces();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getGenero()))
+                    {
+                        Biblioteca.writeBytes("TCON");
+                        ruta= aux.getGenero();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getLetraPista()))
+                    {
+                        Biblioteca.writeBytes("TEXT");
+                        ruta= aux.getLetraPista();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getNoAlb()))
+                    {
+                        Biblioteca.writeBytes("TPOS");
+                        ruta= aux.getNoAlb();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getOtrasPaginas()))
+                    {
+                        Biblioteca.writeBytes("WPUB");
+                        ruta= aux.getOtrasPaginas();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getPaginaDeLaDisquera()))
+                    {
+                        Biblioteca.writeBytes("WOAS");
+                        ruta= aux.getPaginaDeLaDisquera();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getPaginaDelArtista()))
+                    {
+                        Biblioteca.writeBytes("WOAR");
+                        ruta= aux.getPaginaDelArtista();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                    if(!"".equals(aux.getPista()))
+                    {
+                        Biblioteca.writeBytes("TIT2");
+                        ruta= aux.getPista();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                
+                    }
+                    if(!"".equals(aux.getTextoInformativo()))
+                    {
+                        Biblioteca.writeBytes("TXXX");
+                        ruta= aux.getTextoInformativo();
+                        Biblioteca.writeShort(ruta.length());
+                        Biblioteca.writeBytes(ruta);
+                    }
+                }
+                Biblioteca.writeBytes("MERC");
+                //###################
+                //ahora toca escribir los indices, actualizar los apuntadores del inicio hacia donde esten cada uno de estos indices, así como sumarle la resta de los tamaños a los punteros que corresponda
+                int posicionActual= (int) Biblioteca.getFilePointer();
+                Biblioteca.writeShort(inAutor.size());
+                Biblioteca.seek(3);
+                Biblioteca.writeInt(posicionActual);
+                Biblioteca.seek(posicionActual+2);
+                for(int i=0;i<inAutor.size();i++)
+                {
+                    Índice auxI =inAutor.get(i);
+
+                    if(!"".equals(auxI.getDefinicion()))
+                    {
+                        Biblioteca.writeShort(auxI.getTamañoDef());
+                        Biblioteca.writeBytes(auxI.getDefinicion());
+                        if(i>posicP1) //esto de aquí es para mover a donde apuntan los punteros
+                        {
+                            auxI.setPuntero(auxI.getPuntero()+resta);
+                        }
+                        Biblioteca.writeInt(auxI.getPuntero());
+                    }
+                }
+                posicionActual= (int) Biblioteca.getFilePointer();
+                Biblioteca.writeShort(inPista.size());
+                Biblioteca.seek(7);
+                Biblioteca.writeInt(posicionActual);
+                Biblioteca.seek(posicionActual+2);
+                for(int i=0;i<inPista.size();i++)
+                {
+                    Índice auxI = new Índice();
+                    auxI= inPista.get(i);
+
+                    if(!"".equals(auxI.getDefinicion()))
+                    {
+                        Biblioteca.writeShort(auxI.getTamañoDef());
+                        Biblioteca.writeBytes(auxI.getDefinicion());
+                        if(i>posicP2)
+                        {
+                            auxI.setPuntero(auxI.getPuntero()+resta);
+                        }
+                        Biblioteca.writeInt(auxI.getPuntero());
+                    }
+
+                }
+                posicionActual= (int) Biblioteca.getFilePointer();
+                Biblioteca.writeShort(inAño.size());
+                Biblioteca.seek(11);
+                Biblioteca.writeInt(posicionActual);
+                Biblioteca.seek(posicionActual+2);
+                for(int i=0;i<inAño.size();i++)
+                {
+                    Índice auxI = new Índice();
+                    auxI= inAño.get(i);
+
+                    if(!"".equals(auxI.getDefinicion()))
+                    {
+                        Biblioteca.writeShort(auxI.getTamañoDef());
+                        Biblioteca.writeBytes(auxI.getDefinicion());
+                        if(i>posicP3)
+                        {
+                            auxI.setPuntero(auxI.getPuntero()+resta);
+                        }
+                        Biblioteca.writeInt(auxI.getPuntero());
+                    }
+                }
+                Biblioteca.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+
     }//GEN-LAST:event_GuardarCambiosActionPerformed
 
     public void Buscar(String texto, int tipo) //me sirve para encontrar un registro, ya sea por autor, pista o año
